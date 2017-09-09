@@ -48,7 +48,7 @@ var
   i:integer;
   Cod:integer;
 begin
-     i:=1;
+     i:=n+1;
      repeat
         Write('Ingrese el codigo del producto (0 para terminar) ->') ;
         readln(Cod);
@@ -101,13 +101,17 @@ end;
 
 procedure MostrarProductosPorTipo(Productos:AProductos;N:integer;TipoBuscado:char);
 var
-  i:integer;
+  i,PosicionEnTabla:integer;
 begin
-     CrearCabecera();
-     for i:=1 to N do
-       with Productos[i] do
-         if (Tipo=TipoBuscado) then
-           MostrarProductoTabla(Productos[i],i+1);
+   PosicionEnTabla:=2;
+   CrearCabecera();
+   for i:=1 to N do
+     with Productos[i] do
+       if (Tipo=TipoBuscado) then
+       begin
+         MostrarProductoTabla(Productos[i],PosicionEnTabla);
+         Inc(PosicionEnTabla);
+       end;
 end;
 
 procedure Intercambiar(var X:TProducto;var Y:TProducto);
@@ -119,6 +123,7 @@ begin
   Y:=Temp;
 end;
 
+//metodo de seleccion
 procedure OrdenarProductosPorNombre(var Productos:AProductos;N:integer);
 Var
  i, j,Minimo: Integer;
@@ -142,24 +147,31 @@ begin
        MostrarProductoTabla(Productos[i],i+1);
 end;
 
-procedure OrdenarProductosPorMayorPrecio(var Productos:AProductos;N:integer);
-var
-  top,insercionPos:integer;
-  cache:TProducto;
-begin
-    for top:=1 to N-1 do
-    begin
-      cache:=Productos[top];
-      InsercionPos:=top;
-      while (Productos[insercionPos-1].Precio > cache.Precio)
-      and (insercionpos>0) do
-      begin
-        Productos[insercionPos]:=Productos[insercionpos-1];
-        dec(insercionPos);
-      end;
-      Productos[insercionPos]:=cache;
-    end;
-end;
+//metodo de insercion
+Procedure OrdenarProductosPorMayorPrecio(Var ListaProductos : AProductos; N : Integer);
+ Var
+   Top,
+   InsersionPos:integer;
+   Cache: TProducto;
+   Found: Boolean;
+Begin
+   For Top := 2 To N Do
+   Begin
+     Cache := ListaProductos[Top];
+     InsersionPos := Top - 1;
+     Found := false;
+     While (InsersionPos >= 1)
+      And (Not Found) Do
+       If (Cache.Precio > ListaProductos[InsersionPos].Precio) Then
+       Begin
+         ListaProductos[InsersionPos + 1] := ListaProductos[InsersionPos];
+         InsersionPos := InsersionPos - 1
+       End
+       else
+         Found := true;
+       ListaProductos[InsersionPos + 1] := Cache;
+   End
+End;
 
 procedure MostrarKProductosPorMayorPrecio (var Productos:AProductos;
   N:integer;K:integer);
@@ -168,6 +180,8 @@ var
 begin
     OrdenarProductosPorMayorPrecio(Productos,N);
     CrearCabecera();
+    if (k>n) then
+       k:=n;
     for i:=1 to K do
       MostrarProductoTabla(Productos[i],i+1);
 end;
@@ -183,6 +197,7 @@ begin
      for i:=Pos to N-1 do
        Productos[i]:=Productos[i+1];
      dec(N);
+     writeln('Producto eliminado correctamente');
    end
    else
      writeln('El producto no existe');
@@ -202,7 +217,7 @@ begin
        writeln('Modifique el nombre (anterior:',Nombre,')');
        write('->');
        readln(Nombre);
-       writeln('Modifique el precio (anterior:',Precio,')');
+       writeln('Modifique el precio (anterior:',Precio:4:2,')');
        write('->');
        readln(Precio);
        writeln('Modifique el tipo (anterior:',Tipo,')');
@@ -214,11 +229,61 @@ begin
      writeln('El producto no existe');
 end;
 
+function MostrarMenu():integer;
+begin
+  WriteLn('MENU');
+  WriteLn('1- Cargar productos');
+  WriteLn('2- Mostrar productos por tipo');
+  WriteLn('3- Mostrar productos ordenados por nombre');
+  WriteLn('4- Mostrar productos con mayor precio');
+  WriteLn('5- Eliminar un producto');
+  WriteLn('6- Modificar un producto');
+  WriteLn('0- Salir');
+  Write('->');
+  Readln(MostrarMenu);
+end;
+
 var
   ListaProductos:AProductos;
-  N:integer;
+  N,Opcion,Cantidad,Codigo:Integer;
 begin
   N:=0;
-
+  repeat
+     ClrScr;
+     Opcion:=MostrarMenu();
+     case Opcion of
+       1:CargarProductos(ListaProductos,N);
+       2:
+       begin
+         write('Ingrese el tipo por el que desea filtrar(A,B,C) ->');
+         MostrarProductosPorTipo(ListaProductos,N,CargarTipo());
+       end;
+       3:MostrarProductosPorNombre(ListaProductos,N);
+       4:
+       begin
+          write('Cuantos productos desea visualizar? ->');
+          readln(Cantidad);
+          MostrarKProductosPorMayorPrecio(ListaProductos,N,Cantidad);
+       end;
+       5:
+       begin
+          write('Ingrese el codigo del producto a eliminar ->');
+          ReadLn(Codigo);
+          EliminarProducto(ListaProductos,N,Codigo);
+       end;
+       6:
+       begin
+          write('Ingrese el codigo del producto a modificar ->');
+          ReadLn(Codigo);
+          ModificarProducto(ListaProductos,N,Codigo);
+       end;
+       0:writeln('Fin del programa');
+       else
+         writeln('Opcion incorrecta');
+     end;
+     WriteLn;
+     write('Presione una tecla para continuar...');
+     ReadKey;
+  until Opcion=0;
 end.
 
