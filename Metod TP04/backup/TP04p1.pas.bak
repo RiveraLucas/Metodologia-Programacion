@@ -219,6 +219,8 @@ var
   N:integer;
 begin
   N:=0;
-
+  CargarProductos(ListaProductos,N);
+  MostrarProductosPorNombre(ListaProductos,N);
+  readkey();
 end.
 
