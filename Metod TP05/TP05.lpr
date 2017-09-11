@@ -94,12 +94,25 @@ begin
   until (Opcion='N');
 end;
 
+procedure MostrarEquipoTabla(Equipo:TCelular;y:integer);
+begin
+
+end;
+
+procedure MostrarEquipos (Equipos:ACelular;N:integer);
+var
+  i:integer;
+begin
+  for i:=1 to N do
+    MostrarEquipoTabla(Equipos[i],i+1);
+end;
+
 function MostrarMenu ():integer;
 begin
   WriteLn('MENU');
   WriteLN('1- Cargar equipos');
-  WriteLn('2- Mostrar equipos por modelo');
-  WriteLn('3- Mostrar equipos por precio');
+  WriteLn('2- Mostrar equipos de una marca por modelo');
+  WriteLn('3- Mostrar equipos de una marca por precio');
   WriteLn('4- Buscar equipo por numero de serie');
   WriteLn('5- Buscar equipo por precio');
   WriteLn('6- Mostrar equipos por resolucion de camara principal');

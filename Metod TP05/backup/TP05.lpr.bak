@@ -29,7 +29,8 @@ begin
 end;
 procedure CargarEquipos (var Equipos:ACelular; var N: integer);
 var
-  i:integer;
+  i,
+  OpcionEstado,
   Cod:integer;
   Opcion:char;
 begin
@@ -67,14 +68,43 @@ begin
       ReadLn(SistOp);
       Write('Ingrese la capacidad de bateria (mAh) ->');
       ReadLn(CapacidadBat);
-      Write('Ingrese el estado (EN STOCK,VENDIDO) ->');
-      ReadLn(Estado);
+      Write('Ingrese el estado (1- EN STOCK,2- VENDIDO) ->');
+      ReadLn(OpcionEstado);
+      repeat
+        if (OpcionEstado=1) then
+        begin
+           Estado := 'EN STOCK'
+        end
+        else if (OpcionEstado=2) then
+        begin
+           Estado := 'VENDIDO'
+        end
+        else
+        begin
+           Write('Estado incorrecto, ingrese nuevamente ->');
+           ReadLn(OpcionEstado);
+        end;
+      until (OpcionEstado=1) or (OpcionEstado=2);
+
       WriteLn();
       WriteLn('Desea ingresar otro equipo? S/N ->');
       ReadLn(Opcion);
       Opcion := upCase(Opcion);
     end;
   until (Opcion='N');
+end;
+
+procedure MostrarEquipoTabla(Equipo:TCelular;y:integer);
+begin
+
+end;
+
+procedure MostrarEquipos (Equipos:ACelular;N:integer);
+var
+  i:integer;
+begin
+  for i:=1 to N do
+    MostrarEquipoTabla(Equipos[i],i+1);
 end;
 
 function MostrarMenu ():integer;
