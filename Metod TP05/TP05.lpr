@@ -14,7 +14,7 @@ type
     ResCamaraPrin: Integer;
     ResCamaraFron: Integer;
     TamanioDisplay: Real;
-    ResolDisplay: TString;
+    ResDisplay: TString;
     MemoriaInt: TString;
     MemoriaExtMax: TString;
     SistOp: TString;
@@ -23,22 +23,75 @@ type
   end;
   ACelular = array[1..MAX] of TCelular;
 
+function BuscarEquipoPorCodigo(Equipos:ACelular;N:integer;Buscado:integer):integer;
+begin
+  BuscarEquipoPorCodigo := -1;
+end;
 procedure CargarEquipos (var Equipos:ACelular; var N: integer);
 var
-  i:integer;
+  i,
+  OpcionEstado,
   Cod:integer;
   Opcion:char;
 begin
+  i:=N+1;
   repeat
     Write('Ingrese el Numero de Serie ->');
-    ReadLn(cod);
-    {
-    while(BuscarEquipoPorCodigo(equipos,N,Cod)<>-1) do
+    ReadLn(Cod);
+    while(BuscarEquipoPorCodigo(Equipos,N,Cod)<>-1) do
     begin
-
+      Write('El nro de serie ya existe, ingrese otro ->');
+      ReadLn(Cod);
     end;
-    }
-  until (Opcion='N' or Opcion='n' );
+    with Equipos[i] do
+    begin
+      NroSerie:=Cod;
+      Write('Ingrese la marca ->');
+      ReadLn(Marca);
+      Write('Ingrese el modelo ->');
+      ReadLn(Modelo);
+      Write('Ingrese el precio->');
+      ReadLn(Precio);
+      Write('Ingrese la resolucion de la camara principal ->');
+      ReadLn(ResCamaraPrin);
+      Write('Ingrese la resolucion de la camara frontal ->');
+      ReadLn(ResCamaraFron);
+      Write('Ingrese el tamanio del display ->');
+      ReadLn(TamanioDisplay);
+      Write('Ingrese la resolucion del display ->');
+      ReadLn(ResDisplay);
+      Write('Ingrese la memoria interna (En GB) ->');
+      ReadLn(MemoriaInt);
+      Write('Ingrese la memoria externa maxima (En GB) ->');
+      ReadLn(MemoriaExtMax);
+      Write('Ingrese el sistema operativo ->');
+      ReadLn(SistOp);
+      Write('Ingrese la capacidad de bateria (mAh) ->');
+      ReadLn(CapacidadBat);
+      Write('Ingrese el estado (1- EN STOCK,2- VENDIDO) ->');
+      ReadLn(OpcionEstado);
+      repeat
+        if (OpcionEstado=1) then
+        begin
+           Estado := 'EN STOCK'
+        end
+        else if (OpcionEstado=2) then
+        begin
+           Estado := 'VENDIDO'
+        end
+        else
+        begin
+           Write('Estado incorrecto, ingrese nuevamente ->');
+           ReadLn(OpcionEstado);
+        end;
+      until (OpcionEstado=1) or (OpcionEstado=2);
+
+      WriteLn();
+      WriteLn('Desea ingresar otro equipo? S/N ->');
+      ReadLn(Opcion);
+      Opcion := upCase(Opcion);
+    end;
+  until (Opcion='N');
 end;
 
 function MostrarMenu ():integer;
@@ -69,7 +122,7 @@ begin
      case Opcion of
        1:
        begin
-
+          CargarEquipos(Celulares,N);
        end;
        2:
        begin
