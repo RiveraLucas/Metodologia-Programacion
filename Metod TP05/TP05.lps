@@ -9,12 +9,16 @@
         <Filename Value="TP05.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="37"/>
-        <CursorPos X="9" Y="84"/>
+        <CursorPos X="6" Y="40"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
       </Unit0>
     </Units>
-    <JumpHistory HistoryIndex="-1"/>
+    <JumpHistory Count="1">
+      <Position1>
+        <Filename Value="TP05.lpr"/>
+        <Caret Line="34" TopLine="13"/>
+      </Position1>
+    </JumpHistory>
   </ProjectSession>
 </CONFIG>

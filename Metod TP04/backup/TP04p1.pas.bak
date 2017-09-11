@@ -35,6 +35,7 @@ function CargarTipo():char;
 begin
   repeat
     ReadLn(CargarTipo);
+    upCase(CargarTipo);
     if not((CargarTipo='A')or(CargarTipo='B')or(CargarTipo='C')) then
     begin
        writeln('Tipo incorrecto, debe ser A, B o C, ingrese nuevamente');
@@ -123,6 +124,7 @@ begin
   Y:=Temp;
 end;
 
+//metodo de seleccion
 procedure OrdenarProductosPorNombre(var Productos:AProductos;N:integer);
 Var
  i, j,Minimo: Integer;
@@ -146,7 +148,7 @@ begin
        MostrarProductoTabla(Productos[i],i+1);
 end;
 
-{procedure OrdenarProductosPorMayorPrecio(var Productos:AProductos;N:integer); }
+//metodo de insercion
 Procedure OrdenarProductosPorMayorPrecio(Var ListaProductos : AProductos; N : Integer);
  Var
    Top,
@@ -171,25 +173,6 @@ Begin
        ListaProductos[InsersionPos + 1] := Cache;
    End
 End;
-
-
-{var
-  top,insercionPos:integer;
-  cache:TProducto;
-begin
-    for top:=1 to N-1 do
-    begin
-      cache:=Productos[top];
-      InsercionPos:=top;
-      while (Productos[insercionPos-1].Precio > cache.Precio)
-      and (insercionpos>0) do
-      begin
-        Productos[insercionPos]:=Productos[insercionpos-1];
-        dec(insercionPos);
-      end;
-      Productos[insercionPos]:=cache;
-    end;
-end; }
 
 procedure MostrarKProductosPorMayorPrecio (var Productos:AProductos;
   N:integer;K:integer);
@@ -235,7 +218,7 @@ begin
        writeln('Modifique el nombre (anterior:',Nombre,')');
        write('->');
        readln(Nombre);
-       writeln('Modifique el precio (anterior:',Precio,')');
+       writeln('Modifique el precio (anterior:',Precio:4:2,')');
        write('->');
        readln(Precio);
        writeln('Modifique el tipo (anterior:',Tipo,')');

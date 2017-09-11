@@ -42,8 +42,56 @@ end;
 
 var
   Celulares:ACelular;
-  n:integer;
+  N,Opcion:integer;
 begin
-  MostrarMenu;
+  N:=0;
+  repeat
+     ClrScr;
+     Opcion:=MostrarMenu();
+     case Opcion of
+       1:
+       begin
+
+       end;
+       2:
+       begin
+
+       end;
+       3:
+       begin
+
+       end;
+       4:
+       begin
+
+       end;
+       5:
+       begin
+
+       end;
+       6:
+       begin
+
+       end;
+       7:
+       begin
+
+       end;
+       8:
+       begin
+
+       end;
+       9:
+       begin
+
+       end;
+       0:writeln('Fin del programa');
+       else
+         writeln('Opcion incorrecta');
+     end;
+     WriteLn;
+     write('Presione una tecla para continuar...');
+     ReadKey;
+  until Opcion=0;
 end.
 

@@ -35,6 +35,7 @@ function CargarTipo():char;
 begin
   repeat
     ReadLn(CargarTipo);
+    CargarTipo := upCase(CargarTipo);
     if not((CargarTipo='A')or(CargarTipo='B')or(CargarTipo='C')) then
     begin
        writeln('Tipo incorrecto, debe ser A, B o C, ingrese nuevamente');

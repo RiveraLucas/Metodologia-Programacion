@@ -23,6 +23,24 @@ type
   end;
   ACelular = array[1..MAX] of TCelular;
 
+procedure CargarEquipos (var Equipos:ACelular; var N: integer);
+var
+  i:integer;
+  Cod:integer;
+  Opcion:char;
+begin
+  repeat
+    Write('Ingrese el Numero de Serie ->');
+    ReadLn(cod);
+    {
+    while(BuscarEquipoPorCodigo(equipos,N,Cod)<>-1) do
+    begin
+
+    end;
+    }
+  until (Opcion='N' or Opcion='n' );
+end;
+
 function MostrarMenu ():integer;
 begin
   WriteLn('MENU');
