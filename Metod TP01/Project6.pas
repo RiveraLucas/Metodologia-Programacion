@@ -1,0 +1,56 @@
+program Project6;
+uses
+  crt;
+var
+  stock,inStock,outStock,value,option:integer;
+begin
+     inStock:=0;
+     outStock:=0;
+     stock:=0;
+     write('Ingrese el stock inicial ->');
+     readln(stock);
+     writeln();
+     writeln('STOCK DE PRODUCTOS');
+     writeln('Opciones');
+     writeln('1- Ingreso');
+     writeln('2- Salida');
+     writeln('3-Finalizar');
+     writeln();
+     repeat
+         write('Opcion ->');
+         readln(option);
+
+         case option of
+              1: begin
+                    write('Cantidad ->');
+                    readln(value);
+                    stock:=stock+value;
+                    inStock:=inStock+value
+                 end;
+              2:begin
+                    write('Cantidad ->');
+                    readln(value);
+                    if (value>stock) then begin
+                        writeln('Stock insuficiente, solo se lleva ',stock);
+                        outStock:=outStock+stock;
+                        stock:=0;
+                    end
+                    else begin
+
+                        stock:=stock-value;
+                        outStock:=outStock+value
+                    end;
+                end;
+              3:begin
+                writeln();
+                writeln('Stock: ', stock);
+                writeln('Ingresos: ',instock);
+                writeln('Salidas: ',outStock);
+                end;
+              otherwise writeln ('Opcion incorrecta');
+         end;
+         writeln();
+     until (option=3);
+     readKey();
+end.
+
