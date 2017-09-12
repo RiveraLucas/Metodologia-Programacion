@@ -9,13 +9,13 @@
         <Filename Value="TP05.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="44"/>
-        <CursorPos X="58" Y="60"/>
-        <UsageCount Value="24"/>
+        <TopLine Value="108"/>
+        <CursorPos X="14" Y="123"/>
+        <UsageCount Value="28"/>
         <Loaded Value="True"/>
       </Unit0>
     </Units>
-    <JumpHistory Count="8" HistoryIndex="7">
+    <JumpHistory Count="14" HistoryIndex="13">
       <Position1>
         <Filename Value="TP05.lpr"/>
         <Caret Line="34" TopLine="13"/>
@@ -48,6 +48,30 @@
         <Filename Value="TP05.lpr"/>
         <Caret Line="99" Column="5" TopLine="81"/>
       </Position8>
+      <Position9>
+        <Filename Value="TP05.lpr"/>
+        <Caret Line="47" Column="6" TopLine="153"/>
+      </Position9>
+      <Position10>
+        <Filename Value="TP05.lpr"/>
+        <Caret Line="9" Column="22"/>
+      </Position10>
+      <Position11>
+        <Filename Value="TP05.lpr"/>
+        <Caret Line="26" Column="74" TopLine="24"/>
+      </Position11>
+      <Position12>
+        <Filename Value="TP05.lpr"/>
+        <Caret Line="57" Column="14" TopLine="53"/>
+      </Position12>
+      <Position13>
+        <Filename Value="TP05.lpr"/>
+        <Caret Line="58" Column="33" TopLine="39"/>
+      </Position13>
+      <Position14>
+        <Filename Value="TP05.lpr"/>
+        <Caret Line="37" Column="22" TopLine="61"/>
+      </Position14>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>

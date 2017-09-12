@@ -5,8 +5,12 @@ const
   MAX=100;
 type
   TString = string[40];
+  TResol = record
+    Ancho,Alto:Integer;
+  end;
+
   TCelular = record
-    NroSerie: Integer;
+    NroSerie: TString;//tipo recomendado por profesor
     Marca: TString;
     Modelo: TString;
     Precio: Real;
@@ -14,32 +18,60 @@ type
     ResCamaraPrin: Real;
     ResCamaraFron: Real;
     TamanioDisplay: Real;
-    ResDisplay: TString;
-    MemoriaInt: Real;
-    MemoriaExtMax: Real;
+    ResDisplay: TResol;//Tipo de dato recomendado por el profesor
+    MemoriaInt: Integer;//El profesor quiere que sea potencia de 2 y lo validemos
+    MemoriaExtMax: Integer;//Lo mismo con este
     SistOp: TString;
     CapacidadBat: Integer;
-    Estado: TString;
+    Estado: Boolean; //Tipo de dato recomendado por el profesor
   end;
   ACelular = array[1..MAX] of TCelular;
 
-function BuscarEquipoPorCodigo(Equipos:ACelular;N:integer;Buscado:integer):integer;
+function BuscarEquipoPorNroSerie(Equipos:ACelular;N:integer;Buscado:TString):integer;
+var
+  Inicio,Fin,Medio:Integer;
+  Encontrado:Boolean;
 begin
-  //TODO
-  BuscarEquipoPorCodigo := -1;
+  Inicio := 1;
+  Fin := N;
+  Encontrado:= False;
+  while (Inicio <= Fin) and not(Encontrado) do
+  begin
+    Medio := (Inicio+Fin) div 2;
+    if (Equipos[Medio].NroSerie = Buscado) then
+    begin
+       Encontrado := True;
+    end
+    else if (Equipos[Medio].NroSerie < Buscado) then
+    begin
+      Inicio := Medio + 1
+    end
+    else
+    begin
+      Fin := Medio - 1;
+    end;
+  end;
+  if (Encontrado) then
+  begin
+    BuscarEquipoPorNroSerie := Medio;
+  end
+  else
+  begin
+     BuscarEquipoPorNroSerie := -1;
+  end;
 end;
 procedure CargarEquipos (var Equipos:ACelular; var N: integer);
 var
   i,
-  OpcionEstado,
-  Cod:integer;
+  OpcionEstado:Integer;
+  Cod:TString;
   Opcion:char;
 begin
   i:=N+1;
   repeat
     Write('Ingrese el Numero de Serie ->');
     ReadLn(Cod);
-    while(BuscarEquipoPorCodigo(Equipos,N,Cod)<>-1) do
+    while(BuscarEquipoPorNroSerie(Equipos,N,Cod)<>-1) do
     begin
       Write('El nro de serie ya existe, ingrese otro ->');
       ReadLn(Cod);
@@ -59,8 +91,9 @@ begin
       ReadLn(ResCamaraFron);
       Write('Ingrese el tamanio del display (en pulgadas)->');
       ReadLn(TamanioDisplay);
-      Write('Ingrese la resolucion del display ->');
-      ReadLn(ResDisplay);
+      Write('Ingrese la resolucion del display (ancho y alto)->');
+      ReadLn(ResDisplay.Ancho);
+      ReadLN(ResDisplay.Alto);
       Write('Ingrese la memoria interna (En GB) ->');
       ReadLn(MemoriaInt);
       Write('Ingrese la memoria externa maxima (En GB) ->');
@@ -74,11 +107,11 @@ begin
       repeat
         if (OpcionEstado=1) then
         begin
-           Estado := 'EN STOCK'
+           Estado := True
         end
         else if (OpcionEstado=2) then
         begin
-           Estado := 'VENDIDO'
+           Estado := False
         end
         else
         begin
@@ -86,7 +119,8 @@ begin
            ReadLn(OpcionEstado);
         end;
       until (OpcionEstado=1) or (OpcionEstado=2);
-
+      inc(N);
+      inc(i);
       WriteLn();
       WriteLn('Desea ingresar otro equipo? S/N ->');
       ReadLn(Opcion);
