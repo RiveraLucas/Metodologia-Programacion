@@ -27,7 +27,6 @@ type
   end;
   ACelular = array[1..MAX] of TCelular;
 
-//Busqueda Binaria, falta el metodo ordenar por nro de serie para que este completo
 function BuscarEquipoPorNroSerie(Equipos:ACelular;N:integer;Buscado:TString):integer;
 var
   Inicio,Fin,Medio:Integer;
@@ -95,7 +94,6 @@ begin
      BuscarEquipoPorPrecio := -1;
   end;
 end;
-
 
 procedure Intercambiar(var X:TCelular;var Y:TCelular);
 var
@@ -226,6 +224,7 @@ begin
   Write('Marca');GotoXY(30,1);
   Write('Modelo');GotoXY(50,1);
   Write('Precio');GotoXY(60,1);
+  Write('Resol');GotoXY(70,1);
   Writeln('Estado');
 end;
 
@@ -238,6 +237,7 @@ begin
     Write(Marca);GotoXY(30,y);
     Write(Modelo);GotoXY(50,y);
     Write(Precio:4:2);GotoXY(60,y);
+    Write(ResCamaraFron:4:2,'Mpx');GotoXY(70,y);
     if (Estado) then
        Writeln('EN STOCK')
     else
@@ -284,6 +284,24 @@ begin
    end;
 end;
 
+procedure MostrarEquiposPorResCamara(Equipos:ACelular;var N:integer;ResCamara:Real);
+var
+  i,pos:integer;
+begin
+   OrdenarPorNroSerie(Equipos,N);
+   ClrScr;
+   MostrarCabecera();
+   pos:=1;
+   for i:=1 to n do
+   begin
+     if (Equipos[i].ResCamaraFron >= ResCamara) then
+     begin
+        MostrarEquipoTabla(Equipos[i],pos+1);
+        inc(pos);
+     end;
+   end;
+end;
+
 function MostrarMenu ():integer;
 begin
   WriteLn('MENU');
@@ -305,7 +323,7 @@ var
   Celulares:ACelular;
   N,Opcion,IndiceBuscado:integer;
   NroSerie,Marca:TString;
-  Precio:Real;
+  Precio,ResCamara:Real;
 begin
   N:=0;
   repeat
@@ -366,7 +384,9 @@ begin
        end;
        6:
        begin
-
+         Writeln('Ingrese la resolucion de la camara principal ->');
+         ReadLn(ResCamara);
+         MostrarEquiposPorResCamara(Celulares,N,ResCamara);
        end;
        7:
        begin
