@@ -25,6 +25,7 @@ type
 
 function BuscarEquipoPorCodigo(Equipos:ACelular;N:integer;Buscado:integer):integer;
 begin
+  //TODO
   BuscarEquipoPorCodigo := -1;
 end;
 procedure CargarEquipos (var Equipos:ACelular; var N: integer);
