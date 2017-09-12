@@ -62,6 +62,41 @@ begin
   end;
 end;
 
+function BuscarEquipoPorPrecio(Equipos:ACelular;N:integer;Buscado:Real):integer;
+var
+  Inicio,Fin,Medio:Integer;
+  Encontrado:Boolean;
+begin
+  Inicio := 1;
+  Fin := N;
+  Encontrado:= False;
+  while (Inicio <= Fin) and not(Encontrado) do
+  begin
+    Medio := (Inicio+Fin) div 2;
+    if (Equipos[Medio].Precio = Buscado) then
+    begin
+       Encontrado := True;
+    end
+    else if (Equipos[Medio].Precio < Buscado) then
+    begin
+      Inicio := Medio + 1
+    end
+    else
+    begin
+      Fin := Medio - 1;
+    end;
+  end;
+  if (Encontrado) then
+  begin
+    BuscarEquipoPorPrecio := Medio;
+  end
+  else
+  begin
+     BuscarEquipoPorPrecio := -1;
+  end;
+end;
+
+
 procedure Intercambiar(var X:TCelular;var Y:TCelular);
 var
   Temp:TCelular;
@@ -81,6 +116,36 @@ begin
      Minimo:=i;
      for J := (I + 1) to N Do
        if (Equipos[j].NroSerie < Equipos[Minimo].NroSerie) then
+           Minimo:=j;
+       Intercambiar(Equipos[i],Equipos[Minimo]);
+   end
+end;
+
+//seleccion
+procedure OrdenarPorModelo(var Equipos:ACelular; var N:integer);
+var
+ i, j,Minimo: Integer;
+begin
+   for i := 1 to N - 1 do
+   begin
+     Minimo:=i;
+     for J := (I + 1) to N Do
+       if (Equipos[j].Modelo < Equipos[Minimo].Modelo) then
+           Minimo:=j;
+       Intercambiar(Equipos[i],Equipos[Minimo]);
+   end
+end;
+
+//seleccion
+procedure OrdenarPorPrecio(var Equipos:ACelular; var N:integer);
+var
+ i, j,Minimo: Integer;
+begin
+   for i := 1 to N - 1 do
+   begin
+     Minimo:=i;
+     for J := (I + 1) to N Do
+       if (Equipos[j].Precio < Equipos[Minimo].Precio) then
            Minimo:=j;
        Intercambiar(Equipos[i],Equipos[Minimo]);
    end
@@ -181,12 +246,42 @@ begin
   end;
 end;
 
-procedure MostrarEquipos (Equipos:ACelular;N:integer);
+//muestra los equipos de una marca dada ordenada por modelo
+procedure MostrarMarcaPorModelo (var Equipos:ACelular;var N:integer;Marca:TString);
 var
-  i:integer;
+  i,pos:integer;
 begin
-  for i:=1 to N do
-    MostrarEquipoTabla(Equipos[i],i+1);
+   OrdenarPorModelo(Equipos,N);
+   ClrScr;
+   MostrarCabecera();
+   pos:=1;
+   for i:=1 to n do
+   begin
+     if (Equipos[i].Marca = Marca) then
+     begin
+        MostrarEquipoTabla(Equipos[i],pos+1);
+        inc(pos);
+     end;
+   end;
+end;
+
+//muestra los equipos de una marca dada ordenada por precio
+procedure MostrarMarcaPorPrecio (var Equipos:ACelular;var N:integer;Marca:TString);
+var
+  i,pos:integer;
+begin
+   OrdenarPorPrecio(Equipos,N);
+   ClrScr;
+   MostrarCabecera();
+   pos:=1;
+   for i:=1 to n do
+   begin
+     if (Equipos[i].Marca = Marca) then
+     begin
+        MostrarEquipoTabla(Equipos[i],pos+1);
+        inc(pos);
+     end;
+   end;
 end;
 
 function MostrarMenu ():integer;
@@ -209,7 +304,8 @@ end;
 var
   Celulares:ACelular;
   N,Opcion,IndiceBuscado:integer;
-  NroSerie:TString;
+  NroSerie,Marca:TString;
+  Precio:Real;
 begin
   N:=0;
   repeat
@@ -222,11 +318,15 @@ begin
        end;
        2:
        begin
-
+         Writeln('Ingrese la marca ->');
+         ReadLn(Marca);
+         MostrarMarcaPorModelo(Celulares,N,Marca);
        end;
        3:
        begin
-
+         Writeln('Ingrese la marca ->');
+         ReadLn(Marca);
+         MostrarMarcaPorPrecio(Celulares,N,Marca);
        end;
        4:
        begin
@@ -237,9 +337,9 @@ begin
            if (IndiceBuscado <> -1) then
            begin
               ClrScr;
-              Writeln('Equipo encontrado');
               MostrarCabecera();
               MostrarEquipoTabla(Celulares[IndiceBuscado],2);
+              Writeln('Equipo encontrado');
            end
            else
            begin
@@ -248,7 +348,21 @@ begin
        end;
        5:
        begin
-
+           Writeln('Ingrese el precio a buscar ->');
+           ReadLn(Precio);
+           OrdenarPorPrecio(Celulares,N);
+           IndiceBuscado := BuscarEquipoPorPrecio(Celulares,N,NroSerie);
+           if (IndiceBuscado <> -1) then
+           begin
+              ClrScr;
+              MostrarCabecera();
+              MostrarEquipoTabla(Celulares[IndiceBuscado],2);
+              Writeln('Equipo encontrado');
+           end
+           else
+           begin
+             Writeln('No se encontro el equipo con ese precio');
+           end;
        end;
        6:
        begin
