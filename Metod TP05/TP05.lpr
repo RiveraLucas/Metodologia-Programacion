@@ -131,7 +131,9 @@ end;
 
 procedure MostrarEquipoTabla(Equipo:TCelular;y:integer);
 begin
-
+    //TODO
+    Writeln('Marca: ',Equipo.Marca);
+    Writeln('Modelo: ',Equipo.Modelo);
 end;
 
 procedure MostrarEquipos (Equipos:ACelular;N:integer);
@@ -161,7 +163,8 @@ end;
 
 var
   Celulares:ACelular;
-  N,Opcion:integer;
+  N,Opcion,IndiceBuscado:integer;
+  NroSerie:TString;
 begin
   N:=0;
   repeat
@@ -182,7 +185,18 @@ begin
        end;
        4:
        begin
-
+           Writeln('Ingrese el nro de serie a buscar ->');
+           ReadLn(NroSerie);
+           IndiceBuscado := BuscarEquipoPorNroSerie(Celulares,N,NroSerie);
+           if (IndiceBuscado <> -1) then
+           begin
+              Writeln('Equipo encontrado');
+              MostrarEquipoTabla(Celulares[IndiceBuscado],2);
+           end
+           else
+           begin
+             Writeln('No se encontro el equipo');
+           end;
        end;
        5:
        begin
