@@ -27,6 +27,7 @@ type
   end;
   ACelular = array[1..MAX] of TCelular;
 
+//Busqueda Binaria, falta el metodo ordenar por nro de serie para que este completo
 function BuscarEquipoPorNroSerie(Equipos:ACelular;N:integer;Buscado:TString):integer;
 var
   Inicio,Fin,Medio:Integer;
@@ -60,6 +61,30 @@ begin
      BuscarEquipoPorNroSerie := -1;
   end;
 end;
+
+procedure Intercambiar(var X:TCelular;var Y:TCelular);
+var
+  Temp:TCelular;
+begin
+  Temp:=X;
+  X:=Y;
+  Y:=Temp;
+end;
+
+procedure OrdenarPorNroSerie(var Equipos:ACelular; var N:integer);
+var
+ i, j,Minimo: Integer;
+begin
+   for i := 1 to N - 1 do
+   begin
+     Minimo:=i;
+     for J := (I + 1) to N Do
+       if (Equipos[j].NroSerie < Equipos[Minimo].NroSerie) then
+           Minimo:=j;
+       Intercambiar(Equipos[i],Equipos[Minimo]);
+   end
+end;
+
 procedure CargarEquipos (var Equipos:ACelular; var N: integer);
 var
   i,
@@ -187,6 +212,7 @@ begin
        begin
            Writeln('Ingrese el nro de serie a buscar ->');
            ReadLn(NroSerie);
+           OrdenarPorNroSerie(Celulares,N);
            IndiceBuscado := BuscarEquipoPorNroSerie(Celulares,N,NroSerie);
            if (IndiceBuscado <> -1) then
            begin
