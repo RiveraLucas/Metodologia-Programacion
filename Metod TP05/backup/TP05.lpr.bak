@@ -71,6 +71,7 @@ begin
   Y:=Temp;
 end;
 
+//seleccion
 procedure OrdenarPorNroSerie(var Equipos:ACelular; var N:integer);
 var
  i, j,Minimo: Integer;
@@ -154,11 +155,30 @@ begin
   until (Opcion='N');
 end;
 
+procedure MostrarCabecera();
+begin
+  Write('Nro Serie');GotoXY(10,1);
+  Write('Marca');GotoXY(30,1);
+  Write('Modelo');GotoXY(50,1);
+  Write('Precio');GotoXY(60,1);
+  Writeln('Estado');
+end;
+
 procedure MostrarEquipoTabla(Equipo:TCelular;y:integer);
 begin
     //TODO
-    Writeln('Marca: ',Equipo.Marca);
-    Writeln('Modelo: ',Equipo.Modelo);
+  with Equipo do
+  begin
+    Write(NroSerie);GotoXY(10,y);
+    Write(Marca);GotoXY(30,y);
+    Write(Modelo);GotoXY(50,y);
+    Write(Precio:4:2);GotoXY(60,y);
+    if (Estado) then
+       Writeln('EN STOCK')
+    else
+      Writeln('VENDIDO');
+
+  end;
 end;
 
 procedure MostrarEquipos (Equipos:ACelular;N:integer);
@@ -212,10 +232,13 @@ begin
        begin
            Writeln('Ingrese el nro de serie a buscar ->');
            ReadLn(NroSerie);
+           OrdenarPorNroSerie(Celulares,N);
            IndiceBuscado := BuscarEquipoPorNroSerie(Celulares,N,NroSerie);
            if (IndiceBuscado <> -1) then
            begin
+              ClrScr;
               Writeln('Equipo encontrado');
+              MostrarCabecera();
               MostrarEquipoTabla(Celulares[IndiceBuscado],2);
            end
            else
