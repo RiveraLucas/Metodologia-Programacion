@@ -10,7 +10,7 @@ type
   end;
 
   TCelular = record
-    NroSerie: TString;//tipo recomendado por profesor
+    NroSerie: TString;
     Marca: TString;
     Modelo: TString;
     Precio: Real;
@@ -18,14 +18,16 @@ type
     ResCamaraPrin: Real;
     ResCamaraFron: Real;
     TamanioDisplay: Real;
-    ResDisplay: TResol;//Tipo de dato recomendado por el profesor
-    MemoriaInt: Integer;//El profesor quiere que sea potencia de 2 y lo validemos
-    MemoriaExtMax: Integer;//Lo mismo con este
+    ResDisplay: TResol;
+    MemoriaInt: Integer;
+    MemoriaExtMax: Integer;
     SistOp: TString;
     CapacidadBat: Integer;
-    Estado: Boolean; //Tipo de dato recomendado por el profesor
+    Estado: Boolean;//En stock=VERDADERO; Vendido=FALSO;
   end;
   ACelular = array[1..MAX] of TCelular;
+
+(*-------------------------------BUSQUEDAS---------------------------------*)
 
 function BuscarEquipoPorNroSerie(Equipos:ACelular;N:integer;Buscado:TString):integer;
 var
@@ -39,26 +41,16 @@ begin
   begin
     Medio := (Inicio+Fin) div 2;
     if (Equipos[Medio].NroSerie = Buscado) then
-    begin
-       Encontrado := True;
-    end
+       Encontrado := True
     else if (Equipos[Medio].NroSerie < Buscado) then
-    begin
       Inicio := Medio + 1
-    end
     else
-    begin
-      Fin := Medio - 1;
-    end;
+      Fin := Medio - 1
   end;
   if (Encontrado) then
-  begin
-    BuscarEquipoPorNroSerie := Medio;
-  end
+    BuscarEquipoPorNroSerie := Medio
   else
-  begin
-     BuscarEquipoPorNroSerie := -1;
-  end;
+    BuscarEquipoPorNroSerie := -1;
 end;
 
 function BuscarEquipoPorPrecio(Equipos:ACelular;N:integer;Buscado:Real):integer;
@@ -73,27 +65,19 @@ begin
   begin
     Medio := (Inicio+Fin) div 2;
     if (Equipos[Medio].Precio = Buscado) then
-    begin
-       Encontrado := True;
-    end
+       Encontrado := True
     else if (Equipos[Medio].Precio < Buscado) then
-    begin
       Inicio := Medio + 1
-    end
     else
-    begin
       Fin := Medio - 1;
-    end;
   end;
   if (Encontrado) then
-  begin
-    BuscarEquipoPorPrecio := Medio;
-  end
+    BuscarEquipoPorPrecio := Medio
   else
-  begin
      BuscarEquipoPorPrecio := -1;
-  end;
 end;
+
+(*-------------------------------ORDENACIONES---------------------------------*)
 
 procedure Intercambiar(var X:TCelular;var Y:TCelular);
 var
@@ -115,7 +99,7 @@ begin
      for J := (I + 1) to N Do
        if (Equipos[j].NroSerie < Equipos[Minimo].NroSerie) then
            Minimo:=j;
-       Intercambiar(Equipos[i],Equipos[Minimo]);
+     Intercambiar(Equipos[i],Equipos[Minimo]);
    end
 end;
 
@@ -149,67 +133,155 @@ begin
    end
 end;
 
+(*-----------CARGA, MODIFICACION, VENTA Y VALIDACIONES---------------------*)
+
+//ValidarGB := ((valor1 and (valor1 - 1)) = 0);
+function ValidarGB(Valor1: integer):Boolean;
+begin
+  if((Valor1 and (Valor1 - 1)) = 0) then
+  begin
+    ValidarGB := true;
+  end
+  else
+  begin
+    ValidarGB := false;
+  end
+end;
+
+function ValidarNroSerie(var Equipos:ACelular;N:Integer):TString;
+begin
+    Write('Ingrese el Numero de Serie ->');
+    ReadLn(ValidarNroSerie);
+    while(BuscarEquipoPorNroSerie(Equipos,N,ValidarNroSerie)<>-1) do
+    begin
+      Write('El nro de serie ya existe, ingrese otro ->');
+      ReadLn(ValidarNroSerie);
+    end;
+end;
+
+function ValidarReal(Valor:Real):Boolean;
+begin
+    ValidarReal:=(Valor>0);
+end;
+
+function ValidarEntero(Valor:Integer):Boolean;
+begin
+  ValidarEntero:= (Valor>0);
+end;
+
+function ValidarResolucion(Ancho,Alto:integer):Boolean;
+begin
+  ValidarResolucion:=(Alto>=800) and (Ancho>=600);
+end;
+
+function ValidarEstado(Valor:integer):Boolean;
+begin
+  ValidarEstado:=(Valor=1)or(Valor=2);
+end;
+
 procedure CargarEquipos (var Equipos:ACelular; var N: integer);
 var
   i,
   OpcionEstado:Integer;
-  Cod:TString;
   Opcion:char;
 begin
   i:=N+1;
   repeat
-    Write('Ingrese el Numero de Serie ->');
-    ReadLn(Cod);
-    while(BuscarEquipoPorNroSerie(Equipos,N,Cod)<>-1) do
-    begin
-      Write('El nro de serie ya existe, ingrese otro ->');
-      ReadLn(Cod);
-    end;
     with Equipos[i] do
     begin
-      NroSerie:=Cod;
+      NroSerie:=ValidarNroSerie(Equipos,N);
+
       Write('Ingrese la marca ->');
       ReadLn(Marca);
+
       Write('Ingrese el modelo ->');
       ReadLn(Modelo);
+
       Write('Ingrese el precio->');
       ReadLn(Precio);
+      while(not ValidarReal(Precio)) do
+        begin
+          Write('Precio debe ser un numero positivo ->');
+          ReadLn(Precio);
+        end;
+
       Write('Ingrese la resolucion de la camara principal (En Mpx)->');
       ReadLn(ResCamaraPrin);
+      while(not ValidarReal(ResCamaraPrin)) do
+        begin
+          Write('Resolucion debe ser un numero positivo ->');
+          ReadLn(ResCamaraPrin);
+        end;
+
       Write('Ingrese la resolucion de la camara frontal (En Mpx)->');
       ReadLn(ResCamaraFron);
+      while(not ValidarReal(ResCamaraFron)) do
+        begin
+          Write('Resolucion debe ser un numero positivo ->');
+          ReadLn(ResCamaraFron);
+        end;
+
       Write('Ingrese el tamanio del display (en pulgadas)->');
       ReadLn(TamanioDisplay);
-      Write('Ingrese la resolucion del display (ancho y alto)->');
+      while(not ValidarReal(TamanioDisplay)) do
+        begin
+          Write('Precio debe ser un numero positivo ->');
+          ReadLn(TamanioDisplay);
+        end;
+
+      Writeln('Ingrese la resolucion del display');
+      Write('(ancho)->');
       ReadLn(ResDisplay.Ancho);
+      Write('(alto) ->');
       ReadLN(ResDisplay.Alto);
-      Write('Ingrese la memoria interna (En GB) ->');
+      while(not ValidarResolucion(ResDisplay.Ancho,ResDisplay.Alto)) do
+        begin
+          Writeln('Resolucion debe ser como minimo 800 alto y 600 ancho ->');
+          Write('(ancho)->');
+          ReadLn(ResDisplay.Ancho);
+          Write('(alto) ->');
+          ReadLN(ResDisplay.Alto);
+        end;
+
+      Write('Ingrese la memoria interna maxima (En GB) ->');
       ReadLn(MemoriaInt);
+      while(not ValidarGB(MemoriaInt)) do
+      begin
+        Write('Ingrese la memoria interna (En GB) ->');
+        ReadLn(MemoriaInt);
+      end;
+
       Write('Ingrese la memoria externa maxima (En GB) ->');
       ReadLn(MemoriaExtMax);
+      while(not ValidarGB(MemoriaExtMax)) do
+      begin
+        Write('Ingrese la memoria externa (En GB) ->');
+        ReadLn(MemoriaExtMax);
+      end;
+
       Write('Ingrese el sistema operativo ->');
       ReadLn(SistOp);
+
       Write('Ingrese la capacidad de bateria (mAh) ->');
       ReadLn(CapacidadBat);
+      while(not ValidarEntero(CapacidadBat)) do
+      begin
+        Write('Capacidad incorrecta debe ser positiva ->');
+        ReadLn(CapacidadBat);
+      end;
+
       Write('Ingrese el estado (1- EN STOCK,2- VENDIDO) ->');
       ReadLn(OpcionEstado);
-      repeat
-        if (OpcionEstado=1) then
-        begin
-           Estado := True
-        end
-        else if (OpcionEstado=2) then
-        begin
-           Estado := False
-        end
-        else
-        begin
-           Write('Estado incorrecto, ingrese nuevamente ->');
-           ReadLn(OpcionEstado);
-        end;
-      until (OpcionEstado=1) or (OpcionEstado=2);
+      while (not ValidarEstado(OpcionEstado)) do
+      begin
+        Write('Estado incorrecto, ingrese nuevamente ->');
+        ReadLn(OpcionEstado);
+      end;
+      Estado:=(OpcionEstado=1);
+
       inc(N);
       inc(i);
+
       WriteLn();
       WriteLn('Desea ingresar otro equipo? S/N ->');
       ReadLn(Opcion);
@@ -218,26 +290,27 @@ begin
   until (Opcion='N');
 end;
 
+(*------------------------MUESTRAS POR PANTALLA-----------------------------*)
+
 procedure MostrarCabecera();
 begin
-  Write('Nro Serie');GotoXY(10,1);
-  Write('Marca');GotoXY(30,1);
-  Write('Modelo');GotoXY(50,1);
-  Write('Precio');GotoXY(60,1);
-  Write('Resol');GotoXY(70,1);
+  Write('Nro');GotoXY(5,1);
+  Write('Marca');GotoXY(20,1);
+  Write('Modelo');GotoXY(35,1);
+  Write('Precio');GotoXY(45,1);
+  Write('Resol');GotoXY(53,1);
   Writeln('Estado');
 end;
 
 procedure MostrarEquipoTabla(Equipo:TCelular;y:integer);
 begin
-    //TODO
   with Equipo do
   begin
-    Write(NroSerie);GotoXY(10,y);
-    Write(Marca);GotoXY(30,y);
-    Write(Modelo);GotoXY(50,y);
-    Write(Precio:4:2);GotoXY(60,y);
-    Write(ResCamaraFron:4:2,'Mpx');GotoXY(70,1);
+    Write(NroSerie);GotoXY(5,y);
+    Write(Marca);GotoXY(20,y);
+    Write(Modelo);GotoXY(35,y);
+    Write(Precio:4:2);GotoXY(45,y);
+    Write(ResCamaraFron:4:1,'Mpx');GotoXY(53,y);
     if (Estado) then
        Writeln('EN STOCK')
     else
@@ -318,6 +391,8 @@ begin
   Write('->');
   Readln(MostrarMenu);
 end;
+
+(*-------------------------------PRINCIPAL---------------------------------*)
 
 var
   Celulares:ACelular;
