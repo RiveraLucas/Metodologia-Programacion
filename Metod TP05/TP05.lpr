@@ -149,6 +149,18 @@ begin
    end
 end;
 
+function validarGB(valor1: integer):Boolean;
+begin
+if((valor1 AND (valor1 - 1)) = 0) then
+begin
+ validarGB := true;
+end
+else
+begin
+validarGB := false;
+end
+end;
+
 procedure CargarEquipos (var Equipos:ACelular; var N: integer);
 var
   i,
@@ -183,8 +195,13 @@ begin
       Write('Ingrese la resolucion del display (ancho y alto)->');
       ReadLn(ResDisplay.Ancho);
       ReadLN(ResDisplay.Alto);
-      Write('Ingrese la memoria interna (En GB) ->');
-      ReadLn(MemoriaInt);
+       Write('Ingrese la memoria interna maxima (En GB) ->');
+       ReadLn(MemoriaInt);
+      while(NOT validarGB(MemoriaInt)) do
+      begin
+        Write('Ingrese la memoria interna (En GB) ->');
+        ReadLn(MemoriaInt);
+      end;
       Write('Ingrese la memoria externa maxima (En GB) ->');
       ReadLn(MemoriaExtMax);
       Write('Ingrese el sistema operativo ->');
