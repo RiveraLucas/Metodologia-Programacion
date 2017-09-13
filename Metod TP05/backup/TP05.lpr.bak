@@ -290,8 +290,94 @@ begin
   until (Opcion='N');
 end;
 
+procedure ModificarEquipo(var Equipo:TCelular);
+begin
+  with Equipo do
+  begin
+   Write('Ingrese la marca (anterior:',Marca,') ->');
+    ReadLn(Marca);
+
+    Write('Ingrese el modelo (anterior:',Modelo,') ->');
+    ReadLn(Modelo);
+
+    Write('Ingrese el precio (anterior:',Precio,') ->');
+    ReadLn(Precio);
+    while(not ValidarReal(Precio)) do
+      begin
+        Write('Precio debe ser un numero positivo ->');
+        ReadLn(Precio);
+      end;
+
+    Write('Ingrese la resolucion de la camara principal (En Mpx)(anterior:',ResCamaraPrin,')->');
+    ReadLn(ResCamaraPrin);
+    while(not ValidarReal(ResCamaraPrin)) do
+      begin
+        Write('Resolucion debe ser un numero positivo ->');
+        ReadLn(ResCamaraPrin);
+      end;
+
+    Write('Ingrese la resolucion de la camara frontal (En Mpx) (anterior:',ResCamaraFron,')->');
+    ReadLn(ResCamaraFron);
+    while(not ValidarReal(ResCamaraFron)) do
+      begin
+        Write('Resolucion debe ser un numero positivo ->');
+        ReadLn(ResCamaraFron);
+      end;
+
+    Write('Ingrese el tamanio del display (en pulgadas)(anterior:',TamanioDisplay,')->');
+    ReadLn(TamanioDisplay);
+    while(not ValidarReal(TamanioDisplay)) do
+      begin
+        Write('Precio debe ser un numero positivo ->');
+        ReadLn(TamanioDisplay);
+      end;
+
+    Writeln('Ingrese la resolucion del display(anterior:',ResDisplay.Ancho,'x',ResDisplay.Alto,')');
+    Write('(ancho)->');
+    ReadLn(ResDisplay.Ancho);
+    Write('(alto) ->');
+    ReadLN(ResDisplay.Alto);
+    while(not ValidarResolucion(ResDisplay.Ancho,ResDisplay.Alto)) do
+      begin
+        Writeln('Resolucion debe ser como minimo 800 alto y 600 ancho ->');
+        Write('(ancho)->');
+        ReadLn(ResDisplay.Ancho);
+        Write('(alto) ->');
+        ReadLN(ResDisplay.Alto);
+      end;
+
+    Write('Ingrese la memoria interna maxima (En GB) (anterior:',MemoriaInt,')->');
+    ReadLn(MemoriaInt);
+    while(not ValidarGB(MemoriaInt)) do
+    begin
+      Write('Ingrese la memoria interna (En GB) ->');
+      ReadLn(MemoriaInt);
+    end;
+
+    Write('Ingrese la memoria externa maxima (En GB) (anterior:',MemoriaExtMax,')->');
+    ReadLn(MemoriaExtMax);
+    while(not ValidarGB(MemoriaExtMax)) do
+    begin
+      Write('Ingrese la memoria externa (En GB) ->');
+      ReadLn(MemoriaExtMax);
+    end;
+
+    Write('Ingrese el sistema operativo (anterior:',SistOp,')->');
+    ReadLn(SistOp);
+
+    Write('Ingrese la capacidad de bateria (mAh) (anterior:',CapacidadBat,')->');
+    ReadLn(CapacidadBat);
+    while(not ValidarEntero(CapacidadBat)) do
+    begin
+      Write('Capacidad incorrecta debe ser positiva ->');
+      ReadLn(CapacidadBat);
+    end;
+  end;
+end;
+
 (*------------------------MUESTRAS POR PANTALLA-----------------------------*)
 
+//Mostramos solo lo mas importante, debido a las limitaciones de ancho de la consola
 procedure MostrarCabecera();
 begin
   Write('Nro');GotoXY(5,1);
@@ -469,7 +555,18 @@ begin
        end;
        8:
        begin
-
+         Writeln('Ingrese el nro de serie del equipo a modificar ->');
+         ReadLn(NroSerie);
+         OrdenarPorNroSerie(Celulares,N);
+         IndiceBuscado := BuscarEquipoPorNroSerie(Celulares,N,NroSerie);
+         if (IndiceBuscado <> -1) then
+         begin
+            ModificarEquipo(Celulares[IndiceBuscado]);
+         end
+         else
+         begin
+           Writeln('No se encontro el equipo');
+         end;
        end;
        9:
        begin
