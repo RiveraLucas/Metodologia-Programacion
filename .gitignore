@@ -1,0 +1,4 @@
+#excluyendo archivos de compilacion 
+*.compiled
+*.exe
+*.o
