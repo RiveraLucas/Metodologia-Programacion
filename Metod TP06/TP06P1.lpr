@@ -115,6 +115,7 @@ var
   i,j,k,z,N3:integer;
 begin
   i := 1; j:=1 ; k := 1;
+  if(N1>= 2) and (N2>=2) then
   OrdenarPorPrecioDesc(v1,n1);
   OrdenarPorPrecioDesc(v2,n2);
   while (i<=N1) and (j<=N2) do
