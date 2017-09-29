@@ -1,6 +1,7 @@
 program TP06p3;
 uses
-  crt;
+  crt,
+    SysUtils, StrUtils;
 type
   Cadena = String[100];
   Vector = Array[1..100] of char;
@@ -96,8 +97,9 @@ begin
   readln(subcad);
   WriteLn('Ingrese el texto que se reemplazara en la cadena');
   readln(sustituto);
-
-
+  cad:= StringReplace(cad,subcad,sustituto, [rfReplaceAll, rfIgnoreCase]);
+  Writeln('La cadena reemplazada es: ',cad);
+  readkey;
 
 end.
 
