@@ -3,3 +3,9 @@
 *.exe
 *.o
 *.bak
+*.bak
+*.compiled
+*.o
+*.exe
+*.lps
+Metod TP06/TP06P1.lps
